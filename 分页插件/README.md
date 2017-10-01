@@ -17,6 +17,6 @@
 5. HTML中使用（结合Bootstrap修饰）
 	```
 	<ul class="pagination">
-		{{ page_str|safe }}
+	    {{ page_str|safe }}
 	</ul>
 	```
