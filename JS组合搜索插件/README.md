@@ -18,4 +18,4 @@
 {% endblock %}
 ```
 ## 图示
-![]('https://github.com/jackupdown/MinePlugins/tree/master/')
+![]('https://github.com/jackupdown/MinePlugins/blob/master/JS%E7%BB%84%E5%90%88%E6%90%9C%E7%B4%A2%E6%8F%92%E4%BB%B6/example.png')
