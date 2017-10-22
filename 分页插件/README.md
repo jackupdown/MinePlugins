@@ -21,4 +21,4 @@
 	</ul>
 	```
 ## 图示
-![](https://github.com/jackupdown/MinePlugins/tree/master/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6/example.png)	
+![](https://github.com/jackupdown/MinePlugins/blob/master/%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6/example.png)	
