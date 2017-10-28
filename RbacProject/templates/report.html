@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+	<style>
+		#pieChart {
+			width: 500px;
+			height: 500px;
+		}
+	</style>
+{% endblock %}
+{% block content %}
+	<div id="pieChart"></div>
+	<div id="lineChart"></div>
+	<div id="lineChart2"></div>
+{% endblock %}
+{% block js %}
+	{#	<script src="/static/plugins/Highcharts-5.0.12/Highcharts-5.0.12/code/highcharts.js"></script>#}
+	{#	<script src="/static/plugins/Highcharts-5.0.12/Highcharts-5.0.12/code/modules/exporting.js"></script>#}
+	<script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+	<script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+	<script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+	{#	<script src="/static/plugins/Highcharts-5.0.12/Highcharts-5.0.12/"></script>#}
+	<script>
+      $(function () {
+          Highcharts.setOptions({
+          });
+          $.ajax({
+              url: '/report.html',
+              type: 'POST',
+              data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+              dataType: 'JSON',
+              success: function (arg) {
+                  console.log(arg);
+                  console.log(arg.pie);
+                  $("#pieChart").highcharts({
+                      chart: {
+                          plotBackgroundColor: null,
+                          plotBorderWidth: null,
+                          plotShadow: false
+                      },
+                      title: {
+                          text: '运维人员处理报障单占比'
+                      },
+                      tooltip: {
+                          headerFormat: '{series.name}<br>',
+                          {#											b or br#}
+                          pointFormat: '{point.name}: <b>{point.percentage:.1f}%</br>'
+                      },
+                      plotOptions: {
+                          pie: {
+                              allowPointSelect: true,
+                              cursor: 'pointer',
+                              dataLabels: {
+                                  enabled: true,
+                                  format: '<b>{point.name}</br>: {point.percentage:.1f}%',
+                                  style: {
+                                      color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                  }
+                              }
+                          }
+                      },
+                      series: [{
+                          type: 'pie',
+                          name: '运维人员处理报障单占比',
+                          data: arg.pieData
+                      }]
+                  });
+                  Highcharts.chart('lineChart', {
+                      title: {
+                          text: '运维人员每日处理报障单',
+                          x: -20 //center
+                      },
+                      subtitle: {
+                          text: '...',
+                          x: -20
+                      },
+                      legend: {
+                          layout: 'horizontal',
+                          align: 'center',
+                          verticalAlign: 'bottom',
+                          borderWidth: 0
+                      },
+                      xAxis: {
+                          type: 'datetime',
+                          labels: {
+                              formatter: function () {
+                                  return Highcharts.dateFormat("%Y-%m-%d", this.value);
+                                  //return this.value;
+                              }
+                          },
+{#													minTickInterval:24#}
+                      },
+                      series: arg.lineData,
+                  });
+
+              }
+          })
+      })
+	</script>
+{% endblock %}
+
+

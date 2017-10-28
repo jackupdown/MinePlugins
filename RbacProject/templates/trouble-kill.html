@@ -1,0 +1,159 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+	<link rel="stylesheet" href="/static/plugins/sweetalert/sweetalert.css">
+{% endblock %}
+
+{% block content %}
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<div class="panel-heading">
+			<a onclick="show('all', this);" class="navbar-link">全部报障</a>
+			<a onclick="show('unprocess', this);" class="navbar-link active">未处理报障</a>
+			<a onclick="show('processed', this);" class="navbar-link">已处理报障</a>
+			<a onclick="show('mine', this);" class="navbar-link">我的报障</a>
+		</div>
+
+		<!-- Table -->
+		<table class="table table-hover">
+			<thead>
+			<th>#</th>
+			<th>标题</th>
+			<th>提交人</th>
+			<th>提交时间</th>
+			<th>状态</th>
+			<th>操作</th>
+			</thead>
+		<!-- 全部报障单 -->
+			<tbody id="all" class="hide">
+			{% for item in troubleList %}
+				<tr>
+				<td>{{ item.id }}</td>
+					<td>{{ item.title }}</td>
+					<td>{{ item.createUser }}</td>
+					<td>{{ item.createTime|date:"Y-m-d H:i:s" }}</td>
+					<td>
+						{% for i in item.statusChoices %}
+							{% if item.status in i %}
+							{{ i.1 }}
+							{% endif %}
+							{% endfor %}
+					</td>
+					<td>
+						{% for auth in codeList %}
+							{% for k,v in auth.items %}
+								<a href="/trouble_kill.html?md={{ k }}&id={{ item.id }}">{{ v }}</a>
+								{% endfor %}
+							{% endfor %}
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		<!-- 未处理报障单 默认优先显示-->
+			<tbody id="unprocess" class="">
+			{% for item in troubleList %}
+				{% if item.status == 1 %}
+				<tr>
+				<td>{{ item.id }}</td>
+					<td>{{ item.title }}</td>
+					<td>{{ item.createUser }}</td>
+					<td>{{ item.createTime|date:"Y-m-d H:i:s" }}</td>
+					<td>
+						{% for i in item.statusChoices %}
+							{% if item.status in i %}
+							{{ i.1 }}
+							{% endif %}
+							{% endfor %}
+					</td>
+					<td>
+						{% for auth in codeList %}
+							{% for k,v in auth.items %}
+								<a href="/trouble_kill.html?md={{ k }}&id={{ item.id }}">{{ v }}</a>
+								{% endfor %}
+							{% endfor %}
+					</td>
+				</tr>
+				{% endif %}
+			{% endfor %}
+			</tbody>
+		<!-- 已处理报障单 -->
+			<tbody id="processed" class="hide">
+			{% for item in troubleList %}
+				{% if item.status == 3 %}
+				<tr>
+				<td>{{ item.id }}</td>
+					<td>{{ item.title }}</td>
+					<td>{{ item.createUser }}</td>
+					<td>{{ item.createTime|date:"Y-m-d H:i:s" }}</td>
+					<td>
+						{{ item.get_status_display }}
+{#						{% for i in item.statusChoices %}#}
+{#							{% if item.status in i %}#}
+{#							{{ i.1 }}#}
+{#							{% endif %}#}
+{#							{% endfor %}#}
+					</td>
+					<td>
+						{% for auth in codeList %}
+							{% for k,v in auth.items %}
+								{% if k == "DETAIL" %}
+								<a href="/trouble_kill.html?md={{ k }}&id={{ item.id }}">{{ v }}</a>
+								{% endif %}
+								{% endfor %}
+							{% endfor %}
+					</td>
+				</tr>
+				{% endif %}
+			{% endfor %}
+			</tbody>
+		<!-- 我处理的报障 -->
+			<tbody id="mine" class="hide">
+			{% for item in troubleList %}
+				{% if item.processor_id == request.session.userInfo.nid %}
+				<tr>
+				<td>{{ item.id }}</td>
+					<td>{{ item.title }}</td>
+					<td>{{ item.createUser }}</td>
+					<td>{{ item.createTime|date:"Y-m-d H:i:s" }}</td>
+					<td>
+						{% for i in item.statusChoices %}
+							{% if item.status in i %}
+							{{ i.1 }}
+							{% endif %}
+							{% endfor %}
+					</td>
+					<td>
+						{% for auth in codeList %}
+							{% for k,v in auth.items %}
+								{% if k == "SOLVE" %}
+								<a href="/trouble_kill.html?md={{ k }}&id={{ item.id }}">继续处理</a>
+								{% else %}
+								<a href="/trouble_kill.html?md={{ k }}&id={{ item.id }}">{{ v }}</a>
+								{% endif %}
+								{% endfor %}
+							{% endfor %}
+					</td>
+				</tr>
+				{% endif %}
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+	<script src="/static/plugins/sweetalert/sweetalert-dev.js"></script>
+	{#//删除记录#}
+	<script>
+	function show(type, self) {
+	    console.log(type, self);
+			$("#"+type).removeClass("hide");
+			$(self).addClass("active");
+			$("#"+type).siblings("tbody").addClass("hide");
+			$(self).siblings("a").removeClass("active");
+  }
+	</script>
+{% endblock %}

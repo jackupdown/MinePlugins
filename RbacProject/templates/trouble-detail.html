@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<div class="panel-heading">报障单详细</div>
+		<!-- Table -->
+		<table class="table table-hover">
+			<tbody>
+			<tr>
+				<td>编号</td>
+				<td>{{ troubleDetail.id }}</td>
+			</tr>
+			<tr>
+				<td>标题</td>
+				<td>{{ troubleDetail.title }}</td>
+			</tr>
+			<tr>
+				<td>详细</td>
+				<td>{{ troubleDetail.detail }}</td>
+			</tr>
+			<tr>
+				<td>创建人</td>
+				<td>{{ troubleDetail.createUser }}</td>
+			</tr>
+			<tr>
+				<td>创建时间</td>
+				<td>{{ troubleDetail.createTime|date:"Y-m-d H:i:s" }}</td>
+			</tr>
+			<tr>
+				<td>当前状态</td>
+				<td>
+					{% for i in troubleDetail.statusChoices %}
+						{% if troubleDetail.status in i %}
+							{{ i.1 }}
+						{% endif %}
+					{% endfor %}
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+
+
+
+{% endblock %}
