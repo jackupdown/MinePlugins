@@ -48,14 +48,14 @@
 	```
 	RBAC_MENU_PERMISSION_SESSION_KEY = "rbac_menu_permission_session_key"
 	RBAC_MENU_KEY = "rbac_menu_key"
-	RBAC_MENU_PERMISSION_KEY = "rbac_menu_permission_key"`
+	RBAC_MENU_PERMISSION_KEY = "rbac_menu_permission_key"
 
 	注意：登录时，获取当前用户菜单以及权限并保存在Session中，用于自动创建当前用户菜单
 	```
 
 * 3.4. 菜单主题
 
-	'RBAC_THEME = "default"'
+	`RBAC_THEME = "default"`
 	
 	`注意：自动创建当前用户菜单时指定的主题`
 
@@ -70,7 +70,7 @@
 
 * 3.6. 无权访问时，页面提示信息
 
-	'RBAC_PERMISSION_MSG = "无权限访问"'
+	`RBAC_PERMISSION_MSG = "无权限访问"`
 
 4. 在数据库中创建用户、角色、权限、菜单以及分配相应权限
 
