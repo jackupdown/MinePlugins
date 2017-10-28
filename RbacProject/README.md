@@ -40,9 +40,9 @@
 
 * 3.2. Session中保存权限信息的Key
 
-`RBAC_PERMISSION_SESSION_KEY = "rbac_permission_session_key"`
+	`RBAC_PERMISSION_SESSION_KEY = "rbac_permission_session_key"`
 
-`注意：登录时，获取当前用户权限信息并保存在该Session中，以后每次访问时，都会在中间件中根据此Key去Session获取权限信息并判断`
+	`注意：登录时，获取当前用户权限信息并保存在该Session中，以后每次访问时，都会在中间件中根据此Key去Session获取权限信息并判断`
     
 * 3.3. Session中保存菜单和权限信息的Key
 	```
@@ -86,26 +86,26 @@
     示例：
 	```
 	def login(request):
-		if request.method == "GET":
-			return render(request, 'login.html')
+	    if request.method == "GET":
+		return render(request, 'login.html')
+	    else:
+		user = request.POST.get('username')
+		pwd = request.POST.get('password')
+		print(user, pwd)
+		obj = models.UserInfo.objects.filter(user__username=user, user__password=pwd).first()
+		print(obj)
+		if obj:
+		    initial_permission(request, obj.user.id)
+		    return redirect('/index.html')
 		else:
-			user = request.POST.get('username')
-			pwd = request.POST.get('password')
-			print(user, pwd)
-			obj = models.UserInfo.objects.filter(user__username=user, user__password=pwd).first()
-			print(obj)
-			if obj:
-				initial_permission(request, obj.user.id)
-				return redirect('/index.html')
-			else:
-                    return render(request, 'login.html', {'msg': '用户名或密码错误'})
+	    return render(request, 'login.html', {'msg': '用户名或密码错误'})
 	```
 
     `注意：默认rbac的用户表只有username、password、email字段，如果想要扩展更多，可以通过OneToOneField进行关联`
     
 	```
 	class UserInfo(models.Model):
-		nickname = models.CharField(max_length=32)
+	    nickname = models.CharField(max_length=32)
 		user = models.OneToOneField(RbacModels.User)
 	```
 
